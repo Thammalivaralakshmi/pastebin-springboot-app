@@ -34,7 +34,7 @@ public class PasteService {
     }
 
     // Increment view count
-    paste.incrementViewCount();
+    paste.setViewCount(paste.getViewCount() + 1);
     repository.save(paste);
 
     return paste;
