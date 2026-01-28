@@ -9,7 +9,7 @@ export default function NewPaste() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8080/api/pastes", {
+      const res = await fetch("https://pastebin-springboot-app.onrender.com/api/pastes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
