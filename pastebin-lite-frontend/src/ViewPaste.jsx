@@ -8,7 +8,7 @@ export default function ViewPaste() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`http://localhost:8080/p/${id}`)
+    fetch(`https://pastebin-springboot-app.onrender.com/p/${id}`)
       .then((res) => {
         if (res.status === 404) {
           setError("Paste not found or expired.");
