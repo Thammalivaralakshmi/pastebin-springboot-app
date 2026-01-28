@@ -42,4 +42,4 @@ EXPOSE 8080
 
 # Run the application
 # Spring Boot automatically uses PORT environment variable if set
-ENTRYPOINT ["java", "-jar", "app.jar"
+ENTRYPOINT ["java", "-jar", "app.jar"]
