@@ -12,10 +12,10 @@ import com.vara.repository.PasteRepository;
 @Service
 public class PasteService {
 
-    private final PasteRepository pasteRepository;
+    private final PasteRepository repository;
 
-    public PasteService(PasteRepository pasteRepository) {
-        this.pasteRepository = pasteRepository;
+    public PasteService(PasteRepository repository) {
+        this.repository = repository;
     }
     
     @Transactional
