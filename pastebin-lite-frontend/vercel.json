@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/p/:id", "destination": "/" }
+    { "source": "/p/:id", "destination": "https://pastebin-springboot-app.onrender.com/p/:id" }
   ]
 }
