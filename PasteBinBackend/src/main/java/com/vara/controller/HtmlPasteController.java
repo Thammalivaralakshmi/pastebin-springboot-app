@@ -42,20 +42,34 @@ public class HtmlPasteController {
 	// }
 	@GetMapping("/p/{id}")
 	@ResponseBody
-	public ResponseEntity<String> getPaste(@PathVariable String id) {
-   		Paste paste = pasteService.fetch(id, Instant.now());
+	public ResponseEntity<String> getPaste(@PathVariable String id, HttpServletRequest request) {
+    	Instant now = timeProvider.now(request);
+    	Paste paste = pasteService.fetch(id, now);
     	if (paste == null) {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body("<h1>Paste not found or expired</h1>");
     	}
 
+    	// Escape content to prevent script injection
     	String safeContent = paste.getContent()
                               .replaceAll("<", "&lt;")
-                              .replaceAll(">", "&gt;"); // prevent script injection
+                              .replaceAll(">", "&gt;");
 
+    	// Calculate remaining views
+    	Integer remainingViews = 0;
+    	if (paste.getMaxViews() != null) {
+        	remainingViews = paste.getMaxViews() - paste.getViewCount();
+        	if (remainingViews < 0) remainingViews = 0;
+    	}
+
+    	// Build HTML response
     	String html = "<html><body>" +
                   "<h2>Paste Content</h2>" +
                   "<pre>" + safeContent + "</pre>" +
+                  "<p>View count: " + paste.getViewCount() + "</p>" +
+                  "<p>Max views: " + (paste.getMaxViews() != null ? paste.getMaxViews() : "Unlimited") + "</p>" +
+                  "<p>Remaining views: " + remainingViews + "</p>" +
+                  "<p>Expires at: " + (paste.getExpiresAt() != null ? paste.getExpiresAt() : "Never") + "</p>" +
                   "</body></html>";
 
     	return ResponseEntity.ok(html);
