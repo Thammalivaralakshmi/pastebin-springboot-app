@@ -15,9 +15,11 @@ import java.util.Map;
 public class HtmlPasteController {
 
 	private final PasteService pasteService;
+	private final TimeProvider timeProvider;
 
-	public HtmlPasteController(PasteService pasteService) {
+	public HtmlPasteController(PasteService pasteService, TimeProvider timeProvider) {
 		this.pasteService = pasteService;
+		this.timeProvider = timeProvider;
 	}
 
 	// @GetMapping("/p/{id}")
