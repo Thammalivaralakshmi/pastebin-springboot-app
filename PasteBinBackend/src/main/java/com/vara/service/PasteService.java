@@ -17,27 +17,28 @@ public class PasteService {
     public PasteService(PasteRepository pasteRepository) {
         this.pasteRepository = pasteRepository;
     }
-//
+    
     @Transactional
     public Paste fetch(String id, Instant now) {
-        Paste paste = pasteRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+    Paste paste = repository.findById(id).orElse(null);
+    if (paste == null) return null;
 
-        // TTL check
-        if (paste.getExpiresAt() != null && now.isAfter(paste.getExpiresAt())) {
-            throw new NotFoundException();
-        }
-
-        // max_views check
-        if (paste.getMaxViews() != null &&
-                paste.getViewCount() >= paste.getMaxViews()) {
-            throw new NotFoundException();
-        }
-
-        // increment view count
-        paste.setViewCount(paste.getViewCount() + 1);
-
-        return pasteRepository.save(paste);
+    // TTL check
+    if (paste.getExpiresAt() != null && now.isAfter(paste.getExpiresAt())) {
+        return null;
     }
+
+    // View count check
+    if (paste.getMaxViews() != null && paste.getViewCount() >= paste.getMaxViews()) {
+        return null;
+    }
+
+    // Increment view count
+    paste.incrementViewCount();
+    repository.save(paste);
+
+    return paste;
+}
+
 
 }
