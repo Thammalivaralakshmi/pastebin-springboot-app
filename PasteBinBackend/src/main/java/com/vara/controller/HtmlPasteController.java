@@ -1,5 +1,6 @@
 package com.vara.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,10 @@ import com.vara.service.PasteService;
 import java.time.Instant;
 import java.util.Map;
 import com.vara.util.TimeProvider;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @Controller
 public class HtmlPasteController {
