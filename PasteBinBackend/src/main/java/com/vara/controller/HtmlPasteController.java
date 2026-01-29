@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.vara.entity.Paste;
 import com.vara.service.PasteService;
+import com.vara.repository.PasteRepository;
 
 import java.time.Instant;
 import java.util.Map;
@@ -22,10 +23,12 @@ public class HtmlPasteController {
 
 	private final PasteService pasteService;
 	private final TimeProvider timeProvider;
+	private final PasteRepository pasteRepository;
 
-	public HtmlPasteController(PasteService pasteService, TimeProvider timeProvider) {
+	public HtmlPasteController(PasteService pasteService, TimeProvider timeProvider, PasteRepository pasteRepository) {
 		this.pasteService = pasteService;
 		this.timeProvider = timeProvider;
+		this.pasteRepository = pasteRepository;
 	}
 
 	// @GetMapping("/p/{id}")
@@ -67,10 +70,13 @@ public class HtmlPasteController {
     	Integer remainingViews = 0;
     	if (paste.getMaxViews() != null) {
         	remainingViews = paste.getMaxViews() - paste.getViewCount();
-        	if (remainingViews < 0) remainingViews = 0;
+        	if (remainingViews <= 0){
+				remainingViews = 0;
+				pasteRepository.deleteById(id);
+			}
     	}
 
-    	// Build HTML response
+    	// Building HTML response
     	String html = "<html><body>" +
                   "<h2>Paste Content</h2>" +
                   "<pre>" + safeContent + "</pre>" +
