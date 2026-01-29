@@ -85,7 +85,10 @@ public ResponseEntity<?> getPaste(@PathVariable String id, HttpServletRequest re
     Integer remainingViews = 0;
     if (paste.getMaxViews() != null) {
         remainingViews = paste.getMaxViews() - paste.getViewCount();
-        if (remainingViews < 0) remainingViews = 0; // safety
+        if (remainingViews < 0){
+           remainingViews = 0; // safety
+           pasteRepository.deleteById(id);
+        }
     }
 
     return ResponseEntity.ok(Map.of(
